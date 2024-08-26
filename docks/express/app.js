@@ -18,6 +18,8 @@ const client = createClient({ url: "redis://redis-service:6379" });
 console.log("hey");
 
 const app = express();
+app.use(cors());
+app.set("view engine", "ejs");
 
 function removeNonAlphabetic(str) {
   return str.replace(/[^a-zA-Z0-9.]/g, "");
@@ -25,7 +27,7 @@ function removeNonAlphabetic(str) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/imgs/");
+    cb(null, "data/uploads/imgs/");
   },
   filename: function (req, file, cb) {
     // Set filename to req.body.group + original file extension
@@ -39,7 +41,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 // Middleware to parse form data
-app.use(cors());
 
 app.post("/", upload.single("img"), (req, res) => {
   console.log("arrived");
@@ -52,11 +53,14 @@ app.post("/", upload.single("img"), (req, res) => {
   res.send("Done");
 });
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  const data = {
+    public_url: process.env.public_url || "http://localhost:30333",
+  };
+  res.render("index", data);
 });
 
 // Start the server
-const port = 3001;
+const port = process.env.node_port || 3001;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

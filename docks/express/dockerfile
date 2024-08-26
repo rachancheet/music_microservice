@@ -1,5 +1,4 @@
 from node
-workdir /APP/
 expose 3001
 copy package-lock.json package.json .
 # copy ./und/a .
