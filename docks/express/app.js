@@ -2,9 +2,9 @@ const cors = require("cors");
 const express = require("express");
 const multer = require("multer");
 const { createClient } = require("redis");
-// const path = require('node:path');
+const path = require("node:path");
 
-const client = createClient({ url: "redis://some-redis:6379" });
+const client = createClient({ url: "redis://redis-service:6379" });
 (async () => {
   client.on("error", (err) => console.log("Redis Client Error", err));
 
@@ -15,7 +15,7 @@ const client = createClient({ url: "redis://some-redis:6379" });
   // const value = await client.get("que1");
   // console.log(value);
 })();
-// console.log("hey")
+console.log("hey");
 
 const app = express();
 
@@ -52,7 +52,7 @@ app.post("/", upload.single("img"), (req, res) => {
   res.send("Done");
 });
 app.get("/", (req, res) => {
-  res.send("HEY");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Start the server
