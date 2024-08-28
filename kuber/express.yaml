@@ -14,8 +14,15 @@ spec:
       labels:
         app: express
     spec:
+      volumes:
+        - name: holy-storage
+          persistentVolumeClaim:
+            claimName: holy-pvc
       containers:
         - name: express
+          volumeMounts:
+            - name: holy-storage
+              mountPath: /data
           image: express
           imagePullPolicy: Never
           ports:
@@ -25,13 +32,8 @@ spec:
               value: "3001"
             - name: public_url
               value: "http://localhost:30333"
-          volumeMounts:
-            - name: holy-storage
-              mountPath: /data
-      volumes:
-        - name: holy-storage
-          persistentVolumeClaim:
-            claimName: holy-pvc
+            - name: img_dir
+              value: "/data/uploads"
 
 ---
 apiVersion: v1

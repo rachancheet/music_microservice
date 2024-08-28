@@ -1,6 +1,6 @@
-from PIL import Image,ImageGrab
+from PIL import Image
 # import time
-# import os
+import os
 import requests
 from bs4 import BeautifulSoup
 import pytesseract
@@ -51,7 +51,7 @@ def main():
 	con = False
 	while not con:
 		try :
-			r = redis.Redis(host='some-redis', port=6379, decode_responses=True)
+			r = redis.Redis(host='redis-service', port=6379, decode_responses=True)
 			r.ping()
 			con = True
 			print("redis connected")
@@ -62,7 +62,10 @@ def main():
 		res = r.brpop("music_que_1")[1]
 		print("msg recived")
 		group_id = res[:res.find("_")]
-		imgpath = "uploads/imgs/"+res
+		if os.environ["img_dir"]:
+			imgpath = os.path.join(os.environ["img_dir"],res)
+		else:
+			imgpath = "/data/uploads"+res
 		print("Going to do ", res)
 		links = dothething(imgpath)
 		if links != "":
@@ -72,6 +75,11 @@ def main():
 
 
 if __name__ =='__main__':
+	try:
+		os.mkdir("/data/uploads")
+		os.mkdir("/data/downs")
+	except:
+		pass
 	main()
 
 

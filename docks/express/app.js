@@ -3,6 +3,7 @@ const express = require("express");
 const multer = require("multer");
 const { createClient } = require("redis");
 const path = require("node:path");
+const fs = require("fs");
 
 const client = createClient({ url: "redis://redis-service:6379" });
 (async () => {
@@ -15,7 +16,15 @@ const client = createClient({ url: "redis://redis-service:6379" });
   // const value = await client.get("que1");
   // console.log(value);
 })();
-console.log("hey");
+
+try {
+  // Create the directory if it doesn't exist
+  fs.mkdirSync("/data/uploads", { recursive: true });
+  fs.mkdirSync("/data/downs", { recursive: true });
+  console.log(`Directory created or already exists: `);
+} catch (err) {
+  console.error(`Error creating directory: ${err.message}`);
+}
 
 const app = express();
 app.use(cors());
@@ -27,7 +36,7 @@ function removeNonAlphabetic(str) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "data/uploads/imgs/");
+    cb(null, process.env.img_dir || "/data/uploads");
   },
   filename: function (req, file, cb) {
     // Set filename to req.body.group + original file extension

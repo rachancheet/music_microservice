@@ -1,9 +1,8 @@
 from node
-workdir /APP/
+workdir /app/
 expose 3001
 copy package-lock.json package.json .
-# copy ./und/a .
 run npm install
+run sudo apt install ffmpeg
 copy . .
-cmd ["node","app.js"]
-# cmd ["./a"]
+cmd ["node","download.js"]

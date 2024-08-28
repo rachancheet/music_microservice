@@ -1,8 +1,7 @@
 from node
+workdir /app/
 expose 3001
 copy package-lock.json package.json .
-# copy ./und/a .
 run npm install
 copy . .
 cmd ["node","app.js"]
-# cmd ["./a"]

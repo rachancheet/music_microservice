@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-deployment
+  labels:
+    app: temp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp
+  template:
+    metadata:
+      labels:
+        app: temp
+    spec:
+      volumes:
+        - name: holy-storage
+          persistentVolumeClaim:
+            claimName: holy-pvc
+      containers:
+        - name: temp
+          volumeMounts:
+            - name: holy-storage
+              mountPath: /data
+          image: alpine:latest
+          command: ["/bin/sh"]
+          args: ["-c", "while true; do echo hello; sleep 10;done"]
+          command: ["/bin/mkdir"]
+          args: ["/data/uploads"]
+          args: ["/data/downs"]
+
+          # command: ["mkdir", "/data/uploads"]
+          # command:
+          #   [
+          #     "/bin/sh",
+          #     "-c",
+          #     "mkdir -p /data/uploads && mkdir -p /data/downs && echo 'hey bete' ",
+          #   ]
+          # imagePullPolicy: Never
+          ports:
+            - containerPort: 3001
+          env:
+            - name: node_port
+              value: "3001"
+            - name: public_url
+              value: "http://localhost:30333"
+            - name: img_dir
+              value: "/data/downs"
