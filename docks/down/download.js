@@ -1,5 +1,6 @@
 const redis = require("redis");
 const { Worker } = require("node:worker_threads");
+const { hostname } = require("node:os");
 // const { REPL_MODE_SLOPPY } = require("repl");
 
 // import { Client } from "pg";
@@ -65,7 +66,7 @@ async function dothething(link) {
 
 async function main() {
   // dothething("gg:vsWxs1tuwDk");
-  const client = redis.createClient();
+  const client = redis.createClient({ url: "redis://redis-service:6379" });
 
   client.on("error", (err) => console.log("Redis Client Error", err));
 

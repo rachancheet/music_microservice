@@ -1,16 +1,17 @@
 const fs = require("fs");
+const path = require("path");
 const { parentPort } = require("node:worker_threads");
 const youtubedl = require("youtube-dl-exec");
 
 parentPort.on("message", ({ group_id, songs }) => {
   console.log("minor ready", group_id, songs);
   songs.forEach((song_id) => {
-    let folderPath = "downs/" + group_id;
+    let folderPath = path.join(process.env.song_dir, group_id);
 
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
     }
-    folderPath += "/" + song_id;
+    folderPath = path.join(folderPath, song_id);
 
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);

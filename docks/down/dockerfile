@@ -1,8 +1,7 @@
 from node
 workdir /app/
-expose 3001
-copy package-lock.json package.json .
+copy package.json .
+# run apt install ffmpeg
 run npm install
-run sudo apt install ffmpeg
 copy . .
 cmd ["node","download.js"]

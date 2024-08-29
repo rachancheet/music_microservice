@@ -26,10 +26,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Make port 6379 available to the world outside this container
-EXPOSE 6379
+# EXPOSE 6379
 
 # Define environment variable
-ENV REDIS_HOST=redis
+# ENV REDIS_HOST=redis
 
 # Command to run the application
 CMD ["python", "app.py"]
